@@ -67,8 +67,10 @@ def carregar_dados_catalogo():
 
 df_catalogo = carregar_dados_catalogo()
 
-# Estado da sessão para não perder variáveis no clique
+# Estado da sessão para não perder variáveis no clique e transferir entre abas
 if "id_selecionado" not in st.session_state: st.session_state.id_selecionado = "9606"
+if "localidade_selecionada" not in st.session_state: st.session_state.localidade_selecionada = "all"
+if "nivel_territorial" not in st.session_state: st.session_state.nivel_territorial = "6"
 if "meta_nome" not in st.session_state: st.session_state.meta_nome = ""
 if "anos_disp" not in st.session_state: st.session_state.anos_disp = ""
 if "vars_disp" not in st.session_state: st.session_state.vars_disp = ""
@@ -81,24 +83,23 @@ if "sugestao_filtro" not in st.session_state: st.session_state.sugestao_filtro =
 st.sidebar.title("📊 DADOS SIDRA")
 aba_ativa = st.sidebar.radio(
     "Navegar para:",
-    ["📋 Guia Principal", "📖 Catálogo (Consultas)", "💡 Tutorial Interativo"]
+    ["📋 Guia Principal", "📖 Catálogo (Consultas)", "📍 Localidades (Cód. IBGE)", "💡 Tutorial Interativo"]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 🗺️ Níveis Territoriais Úteis:")
-st.sidebar.code("1 = Brasil\n3 = Estados\n6 = Municípios")
+st.sidebar.markdown("### 🗺️ Parâmetros Ativos:")
+st.sidebar.info(f"**Tabela ID:** {st.session_state.id_selecionado}\n\n**Cód. Local:** {st.session_state.localidade_selecionada}")
 
 # =========================================================
 # ABA: CATALOGO DE CONSULTAS
 # =========================================================
-if aba_active := aba_ativa == "📖 Catálogo (Consultas)":
+if aba_ativa == "📖 Catálogo (Consultas)":
     st.title("📖 Catálogo de Tabelas (Sua Aba Consultas)")
     st.markdown("Clique em qualquer linha para escolher e ativar a tabela automaticamente no Robô.")
     
-    # Exibe a tabela interativa lindona
+    # Exibe a tabela interativa
     st.dataframe(df_catalogo, use_container_width=True, hide_index=True)
     
-    # Criamos botões dinâmicos organizados por grupos para "Direcionar" para a aba principal
     st.subheader("🎯 Ativação Rápida:")
     grupos = df_catalogo["Grupo"].unique()
     
@@ -109,6 +110,63 @@ if aba_active := aba_ativa == "📖 Catálogo (Consultas)":
                 if st.button(f"Ativar Tabela {row['ID']} - {row['Nome']}", key=f"btn_{row['ID']}"):
                     st.session_state.id_selecionado = row['ID']
                     st.success(f"Tabela {row['ID']} ativada! Vá para a '📋 Guia Principal' para rodar.")
+
+# =========================================================
+# NOVA ABA: CONSULTA DE LOCALIDADES (AUTOMÁTICA)
+# =========================================================
+elif aba_ativa == "📍 Localidades (Cód. IBGE)":
+    st.title("📍 Localizador de Municípios e Estados")
+    st.markdown("Pesquise o nome da cidade para capturar automaticamente o código de 7 dígitos exigido pelo SIDRA.")
+    st.markdown("---")
+    
+    tipo_busca = st.selectbox("O que deseja buscar?", ["Município", "Estado (UF)", "Todo o Brasil"])
+    
+    if tipo_busca == "Todo o Brasil":
+        st.info("Para pesquisar dados agregados de todo o país, o código padrão é **all**.")
+        if st.button("Ativar código para o Brasil Inteiro", type="primary"):
+            st.session_state.localidade_selecionada = "all"
+            st.session_state.nivel_territorial = "1"
+            st.success("Configurado para: Brasil (all). Prontinho na Guia Principal!")
+            
+    elif tipo_busca == "Estado (UF)":
+        with st.spinner("Buscando estados..."):
+            res_uf = requests.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados?ordenar=nome")
+            if res_uf.status_code == 200:
+                list_uf = res_uf.json()
+                opcoes_uf = {f"{uf['nome']} ({uf['sigla']})": str(uf['id']) for uf in list_uf}
+                uf_escolhida = st.selectbox("Selecione o Estado:", list(opcoes_uf.keys()))
+                
+                if st.button("Ativar Estado Selecionado", type="primary"):
+                    st.session_state.localidade_selecionada = opcoes_uf[uf_escolhida]
+                    st.session_state.nivel_territorial = "3"
+                    st.success(f"Estado ativado com sucesso! Código: {opcoes_uf[uf_escolhida]}")
+                    
+    elif tipo_busca == "Município":
+        termo_busca = st.text_input("Digite o nome da cidade (Ex: Belo Horizonte, Redenção...):", value="").strip()
+        
+        if termo_busca:
+            with st.spinner("Consultando municípios na API do IBGE..."):
+                # Busca na API de localidades filtrando pelo termo digitado
+                res_mun = requests.get("https://servicodados.ibge.gov.br/api/v1/localidades/municipios?ordenar=nome")
+                if res_mun.status_code == 200:
+                    todos_mun = res_mun.json()
+                    # Filtra os municípios que contém o termo digitado (ignora maiúsculas/minúsculas)
+                    filtrados = [m for m in todos_mun if termo_busca.lower() in m['nome'].lower()]
+                    
+                    if filtrados:
+                        opcoes_mun = {f"{m['nome']} - {m['microrregiao']['mesorregiao']['UF']['sigla']}": str(m['id']) for m in filtrados}
+                        municipio_escolhido = st.selectbox(f"Encontramos {len(filtrados)} resultados. Selecione o correto:", list(opcoes_mun.keys()))
+                        
+                        id_final_mun = opcoes_mun[municipio_escolhido]
+                        
+                        st.markdown(f"**Código de 7 dígitos encontrado:** `{id_final_mun}`")
+                        
+                        if st.button("🚀 Ativar Município e Direcionar para Pesquisa", type="primary"):
+                            st.session_state.localidade_selecionada = id_final_mun
+                            st.session_state.nivel_territorial = "6"
+                            st.success(f"Cidade ativada! O código {id_final_mun} foi preenchido na Guia Principal.")
+                    else:
+                        st.error("Nenhum município encontrado com este nome. Tente digitar de outra forma.")
 
 # =========================================================
 # ABA: GUIA PRINCIPAL (O CORAÇÃO DO ROBÔ)
@@ -123,7 +181,6 @@ elif aba_ativa == "📋 Guia Principal":
     with col_inputs:
         st.subheader("📥 Insira os Dados")
         
-        # Campo de ID que escuta o catálogo ou aceita digitação direta
         tabela_id = st.text_input("ID da Tabela:", value=st.session_state.id_selecionado).strip()
         
         # BOTÃO 1: CONSULTAR TABELA
@@ -163,8 +220,10 @@ elif aba_ativa == "📋 Guia Principal":
         st.markdown("---")
         st.subheader("⚙️ Parâmetros do Filtro")
         
-        # Filtros idênticos à sua Guia do Excel
-        cod_municipio = st.text_input("Nível Territorial (ex: 6 para Município, 3 para Estado):", value="6")
+        # Agora os campos recebem os dados dinâmicos do session_state vindos da busca automática
+        cod_territorio = st.text_input("Nível Territorial (1=Brasil, 3=Estado, 6=Município):", value=st.session_state.nivel_territorial)
+        cod_municipio = st.text_input("Cód. Localidade / Município (all ou id de 7 dígitos):", value=st.session_state.localidade_selecionada)
+        
         ano_periodo = st.text_input("Ano (Período) (ex: last 1, all, 2022):", value="last 1")
         variavel = st.text_input("Variável ID (ex: all):", value="all")
         subvariaveis = st.text_input("Subvariáveis / Classificações:", value=st.session_state.sugestao_filtro)
@@ -175,7 +234,6 @@ elif aba_ativa == "📋 Guia Principal":
         btn_baixar = st.button("🚀 BAIXAR DADOS DA TABELA", type="primary", use_container_width=True)
 
     with col_outputs:
-        # Se consultou metadados, cria um bloco visual lindo com as infos
         if st.session_state.meta_nome:
             st.info(f"📍 **Tabela Selecionada:** {st.session_state.meta_nome}")
             with st.expander("📂 INFORMAÇÕES E DADOS DISPONÍVEIS (Resultados da Consulta)", expanded=True):
@@ -187,8 +245,11 @@ elif aba_ativa == "📋 Guia Principal":
         st.subheader("📥 Dados Extraídos (Sua Aba Dados)")
         
         if btn_baixar:
-            n_limpo = "".join(filter(str.isdigit, cod_municipio))
-            url_dados = f"https://apisidra.ibge.gov.br/values/t/{tabela_id}/n6/{n_limpo}/v/{variavel}/p/{ano_periodo}"
+            n_limpo = "".join(filter(str.isdigit, cod_territorio))
+            m_limpo = cod_municipio.strip()
+            
+            # Ajuste dinâmico na URL dependendo do nível escolhido (n1 para Brasil, n3 para Estado, n6 para Município)
+            url_dados = f"https://apisidra.ibge.gov.br/values/t/{tabela_id}/n{n_limpo}/{m_limpo}/v/{variavel}/p/{ano_periodo}"
             
             if subvariaveis.strip():
                 filtro_limpo = subvariaveis.strip() if subvariaveis.strip().startswith("/") else "/" + subvariaveis.strip()
@@ -200,8 +261,8 @@ elif aba_ativa == "📋 Guia Principal":
                     if res_dados.status_code == 200:
                         json_dados = res_dados.json()
                         
-                        if "excecao" in json_dados:
-                            st.error(f"Erro retornado pelo IBGE: {json_dados['excecao']}")
+                        if "excecao" in json_dados or (isinstance(json_dados, dict) and json_dados.get("D1C")):
+                            st.error(f"Erro retornado pelo IBGE. Verifique os parâmetros.")
                         else:
                             df = pd.DataFrame(json_dados)
                             colunas_filtradas = [col for col in df.columns if col.endswith("N") or col in ["V", "MN"]]
@@ -213,10 +274,8 @@ elif aba_ativa == "📋 Guia Principal":
                             st.balloons()
                             st.success("✅ Download concluído com sucesso!")
                             
-                            # Tabela Interativa
                             st.dataframe(df_exibicao, use_container_width=True)
                             
-                            # Exportação facilitada
                             csv = df_exibicao.to_csv(index=False).encode('utf-8')
                             st.download_button(
                                 label="💾 Exportar Tabela para Planilha (CSV)",
@@ -255,8 +314,7 @@ elif aba_ativa == "💡 Tutorial Interativo":
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Tabela dinâmica de exemplos baseada na sua planilha original do vídeo
-    st.subheader("🛠️ Exemplos Práticos de Preenchimento")
+    st.subheader("🛠️ Examples Práticos de Preenchimento")
     exemplos = {
         "O que você quer": ["Tudo detalhado", "Apenas um item", "Vários itens específicos", "Total Geral"],
         "O que digitar no campo": ["c1/all/c2/all", "c1/1", "c1/1,2", "(Deixar Vazio)"],
