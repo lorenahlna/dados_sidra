@@ -2,170 +2,269 @@ import streamlit as st
 import requests
 import pandas as pd
 
-# Configuração da página do Streamlit
+# CONFIGURAÇÃO DE DESIGN DA PÁGINA
 st.set_page_config(
     page_title="ROBÔ SIDRA v5.6",
     page_icon="📊",
     layout="wide"
 )
 
-st.title("📊 ROBÔ SIDRA v5.6")
-st.markdown("---")
+# Customização visual premium (Azul IBGE e cinza corporativo)
+st.markdown("""
+    <style>
+    .main { background-color: #f4f6f9; }
+    h1, h2, h3 { color: #003399 !important; font-family: 'Segoe UI', sans-serif; }
+    .stButton>button { border-radius: 8px; font-weight: bold; background-color: #003399; color: white; }
+    .stButton>button:hover { background-color: #002266; color: white; }
+    div[data-testid="stExpander"] { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .card-tutorial { background-color: #e6f0ff; padding: 15px; border-left: 5px solid #003399; border-radius: 4px; }
+    </style>
+""", unsafe_allow_html=True)
 
-# Criando duas colunas principais no Layout: Esquerda para Configurações, Direita para Resultados
-col_config, col_resultado = st.columns([1, 2])
+# ---------------------------------------------------------
+# CARREGAMENTO DA SUA BASE DE DADOS COMPLETA (Aba Consultas)
+# ---------------------------------------------------------
+@st.cache_data
+def carregar_dados_catalogo():
+    return pd.DataFrame([
+        {"Grupo": "Demografia", "Assunto": "Cor ou Raça", "ID": "9606", "Nome": "População por Cor e Idade", "Anos": "2000, 2010", "Descrição": "População residente, por cor ou raça, segundo o sexo e a idade"},
+        {"Grupo": "Demografia", "Assunto": "População", "ID": "475", "Nome": "População por Idade e Sexo", "Anos": "1996", "Descrição": "População residente por grupos de idade, sexo e situação"},
+        {"Grupo": "Demografia", "Assunto": "População", "ID": "202", "Nome": "População por Sexo e Situação", "Anos": "2000, 2010", "Descrição": "População residente, por sexo e situação do domicílio"},
+        {"Grupo": "Demografia", "Assunto": "População", "ID": "9923", "Nome": "População por Situação", "Anos": "2022", "Descrição": "População residente, por situação do domicílio"},
+        {"Grupo": "Demografia", "Assunto": "Estimativas de População", "ID": "6579", "Nome": "Estimativa Populacional Anual", "Anos": "2001-2024", "Descrição": "População residente estimada"},
+        {"Grupo": "Demografia", "Assunto": "Nascimentos", "ID": "197", "Nome": "Nascidos Vivos por Idade da Mãe", "Anos": "2000-2002", "Descrição": "Nascidos vivos ocorridos no ano por grupos de idade da mãe na ocasião do parto e sexo"},
+        {"Grupo": "Demografia", "Assunto": "Nascimentos", "ID": "2647", "Nome": "Nascidos Vivos por Mês e Sexo", "Anos": "2003-2023", "Descrição": "Nascidos vivos, ocorrido no ano, por mês do registro, sexo, local de nascimento ...."},
+        {"Grupo": "Demografia", "Assunto": "População", "ID": "1552", "Nome": "População por Idade e Sexo", "Anos": "2000, 2010", "Descrição": "População residente, por situação do domicílio e sexo, segundo a forma de declaração da idade e a idade"},
+        {"Grupo": "Demografia", "Assunto": "População", "ID": "9514", "Nome": "População por Idade e Sexo", "Anos": "2022", "Descrição": "População residente, por sexo, idade e forma de declaração da idade"},
+        {"Grupo": "Demografia", "Assunto": "Óbitos", "ID": "2684", "Nome": "Óbitos por Idade e Sexo", "Anos": "2003-2023", "Descrição": "Óbitos, por ano de ocorrência, natureza do óbito, sexo, idade, local de ocorrência e lugar do registro"},
+        {"Grupo": "Demografia", "Assunto": "Migração", "ID": "3207", "Nome": "Migrantes Recentes", "Anos": "2010", "Descrição": "Pessoas de 5 anos ou mais de idade que não residiam no município em 31/07/2005, por sexo, situação do domicílio e grupos de idade"},
+        {"Grupo": "Demografia", "Assunto": "Deficiência Permanente", "ID": "1495", "Nome": "Pessoas com Deficiência", "Anos": "2010", "Descrição": "População residente, por tipo de deficiência permanente - Resultados Gerais da Amostra"},
+        {"Grupo": "Demografia", "Assunto": "Deficiência Permanente", "ID": "2111", "Nome": "Deficiência por Idade e Sexo", "Anos": "2010", "Descrição": "População residente por tipo de deficiência, situação do domicílio, sexo e grupos de idade"},
+        {"Grupo": "Demografia", "Assunto": "Emigração Nacional", "ID": "3172", "Nome": "Emigrantes por Sexo e UF", "Anos": "2010", "Descrição": "Emigrantes internacionais, por sexo, segundo as Grandes Regiões e Unidades da Federação das pessoas com quem residiram antes de emigrarem"},
+        {"Grupo": "Demografia", "Assunto": "Emigração Internacional", "ID": "3173", "Nome": "Emigrantes por País Destino", "Anos": "2010", "Descrição": "Emigrantes internacionais, por sexo, segundo os continentes e países estrangeiros de destino"},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "PIB dos Municípios", "ID": "5938", "Nome": "PIB Municipal", "Anos": "2002-2022", "Descrição": "Produto interno bruto a preços correntes, impostos..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Rendimento do Trabalho", "ID": "3552", "Nome": "Rendimento Médio Mensal", "Anos": "2010", "Descrição": "Valor do rendimento nominal médio mensal de todos os trabalhos..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Estatísticas das Empresas", "ID": "1685", "Nome": "Empresas e Empregos (CEMPRE)", "Anos": "1996-2022", "Descrição": "Unidades locais, empresas e outras organizações atuantes..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Ocupação por Setor", "ID": "3602", "Nome": "Pessoas Ocupadas por Atividade", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Condição de Atividade", "ID": "616", "Nome": "Mercado de Trabalho", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade por grupos de idade..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Estatísticas das Empresas", "ID": "993", "Nome": "Empresas por CNAE (CEMPRE Antiga)", "Anos": "2007-2021", "Descrição": "Empresas e outras organizações, por seção da classificação de atividades..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Estatísticas das Empresas", "ID": "9582", "Nome": "Empresas por CNAE (CEMPRE Nova)", "Anos": "2021-2022", "Descrição": "Empresas e outras organizações, por seção da classificação de atividades..."},
+        {"Grupo": "Economia Finanças e Emprego", "Assunto": "Rendimento do Responsável", "ID": "1494", "Nome": "Renda do Responsável", "Anos": "2010", "Descrição": "Pessoas responsáveis pelos domicílios particulares permanentes..."},
+        {"Grupo": "Educação", "Assunto": "Alfabetização", "ID": "9543", "Nome": "Taxa de Alfabetização", "Anos": "2022", "Descrição": "Taxa de alfabetização das pessoas de 15 anos ou mais de idade..."},
+        {"Grupo": "Mobilidade Transporte e Trânsito", "Assunto": "Deslocamento Casa-Trabalho", "ID": "3604", "Nome": "Tempo de Deslocamento", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Infraestrutura do Domicílio", "ID": "3504", "Nome": "Densidade, Água e Esgoto", "Anos": "2010", "Descrição": "Domicílios particulares permanentes, por densidade de moradores..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Abastecimento de Água", "ID": "2420", "Nome": "Abastecimento de Água", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Esgotamento Sanitário", "ID": "2421", "Nome": "Esgotamento Sanitário", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Lixo em Aglomerados Subnormais", "ID": "3384", "Nome": "Lixo em Favelas", "Anos": "2010", "Descrição": "Domicílios particulares permanentes em aglomerados subnormais..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Serviços e Bens Duráveis", "ID": "2408", "Nome": "Bens Duráveis no Domicílio", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Condição de Ocupação", "ID": "2419", "Nome": "Ocupação do Domicílio", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Pesquisa Urbanística de Entorno", "ID": "6591", "Nome": "Entorno dos Domicílios", "Anos": "2010", "Descrição": "Moradores em domicílios particulares permanentes ocupados..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Abastecimento de Água (Entorno)", "ID": "6751", "Nome": "Água no Entorno Urbano", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados e moradores..."},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Características dos Domicílios", "ID": "6326", "Nome": "Tipos de Domicílio", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados, por tipo de domicílio"},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Esgotamento Sanitário", "ID": "6805", "Nome": "Esgotamento Sanitário", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados, por tipo de esgotamento sanitário"},
+        {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Destino do Lixo", "ID": "6892", "Nome": "Destino do Lixo", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados, por destino do lixo"}
+    ])
 
-# Inicializando variáveis no estado da sessão (Session State) para guardar metadados
-if "meta_nome" not in st.session_state:
-    st.session_state.meta_nome = ""
-if "anos_disp" not in st.session_state:
-    st.session_state.anos_disp = ""
-if "vars_disp" not in st.session_state:
-    st.session_state.vars_disp = ""
-if "subvars_disp" not in st.session_state:
-    st.session_state.subvars_disp = ""
-if "sugestao_filtro" not in st.session_state:
-    st.session_state.sugestao_filtro = ""
+df_catalogo = carregar_dados_catalogo()
 
-# ==========================================
-# COLUNA DA ESQUERDA: ENTRADAS E CONFIGURAÇÕES
-# ==========================================
-with col_config:
-    st.header("⚙️ Parâmetros de Busca")
+# Estado da sessão para não perder variáveis no clique
+if "id_selecionado" not in st.session_state: st.session_state.id_selecionado = "9606"
+if "meta_nome" not in st.session_state: st.session_state.meta_nome = ""
+if "anos_disp" not in st.session_state: st.session_state.anos_disp = ""
+if "vars_disp" not in st.session_state: st.session_state.vars_disp = ""
+if "subvars_disp" not in st.session_state: st.session_state.subvars_disp = ""
+if "sugestao_filtro" not in st.session_state: st.session_state.sugestao_filtro = ""
+
+# =========================================================
+# NAVEGAÇÃO POR MENU LATERAL (Estilo Abas do Excel)
+# =========================================================
+st.sidebar.title("📊 CONTROLE DO ROBÔ")
+aba_ativa = st.sidebar.radio(
+    "Navegar para:",
+    ["📋 Guia Principal (Robô)", "📖 Catálogo (Consultas)", "💡 Tutorial Interativo"]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🗺️ Níveis Territoriais Úteis:")
+st.sidebar.code("1 = Brasil\n3 = Estados\n6 = Municípios")
+
+# =========================================================
+# ABA: CATALOGO DE CONSULTAS
+# =========================================================
+if aba_active := aba_ativa == "📖 Catálogo (Consultas)":
+    st.title("📖 Catálogo de Tabelas (Sua Aba Consultas)")
+    st.markdown("Clique em qualquer linha para escolher e ativar a tabela automaticamente no Robô.")
     
-    # Campo equivalente à célula B2 da Guia
-    tabela_id = st.text_input("ID da Tabela (ex: 1737, 1612):", value="1737").strip()
+    # Exibe a tabela interativa lindona
+    st.dataframe(df_catalogo, use_container_width=True, hide_index=True)
     
-    # Botão para consultar metadados (Passo 1)
-    if st.button("1. Consultar Metadados (Anos/Vars/Subs)", use_container_width=True):
-        if not tabela_id:
-            st.error("Erro: Digite o ID da Tabela.")
-        else:
-            with st.spinner("Buscando metadados no IBGE..."):
-                url_meta = f"https://servicodados.ibge.gov.br/api/v3/agregados/{tabela_id}/metadados"
-                url_periodos = f"https://servicodados.ibge.gov.br/api/v3/agregados/{tabela_id}/periodos"
-                
-                try:
-                    res_meta = requests.get(url_meta)
-                    res_anos = requests.get(url_periodos)
-                    
-                    if res_meta.status_code == 200 and res_anos.status_code == 200:
-                        meta = res_meta.json()
-                        anos_data = res_anos.json()
-                        
-                        # Processando dados igual ao seu script
-                        st.session_state.meta_nome = meta.get("nome", "")
-                        st.session_state.anos_disp = ", ".join([str(a["id"]) for a in anos_data])
-                        st.session_state.vars_disp = "\n".join([f"[{v['id']}] {v['nome']}" for v in meta.get("variaveis", [])])
-                        
-                        classifs_list = []
-                        sugestoes = []
-                        for c in meta.get("classificacoes", []):
-                            cats = ", ".join([f"{cat['id']}:{cat['nome']}" for cat in c.get("categorias", [])])
-                            classifs_list.append(f"Subvariável [{c['id']}] {c['nome']}:\n   Categorias: {cats}")
-                            sugestoes.append(f"c{c['id']}/all")
-                        
-                        st.session_state.subvars_disp = "\n\n".join(classifs_list)
-                        st.session_state.sugestao_filtro = "/".join(sugestoes)
-                        st.toast("Metadados carregados com sucesso!", icon="✅")
-                    else:
-                        st.error("Erro ao acessar API do IBGE. Verifique o ID da tabela.")
-                except Exception as e:
-                    st.error(f"Erro ao buscar metadados: {str(e)}")
+    # Criamos botões dinâmicos organizados por grupos para "Direcionar" para a aba principal
+    st.subheader("🎯 Ativação Rápida:")
+    grupos = df_catalogo["Grupo"].unique()
+    
+    for g in grupos:
+        with st.expander(f"📁 Tabelas de {g}"):
+            sub_df = df_catalogo[df_catalogo["Grupo"] == g]
+            for _, row in sub_df.iterrows():
+                if st.button(f"Ativar Tabela {row['ID']} - {row['Nome']}", key=f"btn_{row['ID']}"):
+                    st.session_state.id_selecionado = row['ID']
+                    st.success(f"Tabela {row['ID']} ativada! Vá para a '📋 Guia Principal' para rodar.")
 
-    if st.session_state.meta_nome:
-        st.info(f"📋 **Tabela selecionada:**\n{st.session_state.meta_nome}")
-
+# =========================================================
+# ABA: GUIA PRINCIPAL (O CORAÇÃO DO ROBÔ)
+# =========================================================
+elif aba_ativa == "📋 Guia Principal (Robô)":
+    st.title("🤖 Robô SIDRA v5.6")
+    st.caption("Insira os dados à esquerda e veja a mágica acontecer à direita")
     st.markdown("---")
-    st.subheader("Filtros para Download")
     
-    # Campos equivalentes às células B3, B5, B6 e B8 da planilha Guia
-    # Deixei valores padrão comuns do SIDRA para facilitar o teste inicial
-    n_territorio = st.text_input("Nível Territorial (Apenas números - ex: 6 para Municípios):", value="6")
-    periodos = st.text_input("Períodos / Anos (ex: last 1, 2023, all):", value="last 1")
-    variavel = st.text_input("ID da Variável (ex: 226):", value="all")
+    col_inputs, col_outputs = st.columns([1, 2])
     
-    # Campo de classificação pré-preenchido com a sugestão que veio dos metadados
-    classificacao = st.text_input(
-        "Subvariáveis / Classificações (Opcional):", 
-        value=st.session_state.sugestao_filtro,
-        help="Exemplo: c1/all"
-    )
-
-    # Botão para Baixar Dados (Passo 2)
-    botao_baixar = st.button("2. Baixar Dados com Filtros", type="primary", use_container_width=True)
-
-# ==========================================
-# COLUNA DA DIREITA: EXIBIÇÃO DOS RESULTADOS
-# ==========================================
-with col_resultado:
-    # Se existirem metadados carregados, mostra em abas organizadas
-    if st.session_state.meta_nome:
-        st.header("📋 Informações da Tabela")
-        aba_anos, aba_vars, aba_subs = st.tabs(["📅 Anos Disponíveis", "🔢 Variáveis", "🧩 Subvariáveis"])
+    with col_inputs:
+        st.subheader("📥 Insira os Dados")
         
-        with aba_anos:
-            st.write(st.session_state.anos_disp)
-        with aba_vars:
-            st.text(st.session_state.vars_disp)
-        with aba_subs:
-            st.text(st.session_state.subvars_disp)
+        # Campo de ID que escuta o catálogo ou aceita digitação direta
+        tabela_id = st.text_input("ID da Tabela:", value=st.session_state.id_selecionado).strip()
+        
+        # BOTÃO 1: CONSULTAR TABELA
+        if st.button("🔵 CONSULTAR TABELA (Metadados)", type="secondary", use_container_width=True):
+            if not tabela_id:
+                st.error("Erro: Digite o ID da Tabela.")
+            else:
+                with st.spinner("Buscando informações no IBGE..."):
+                    url_meta = f"https://servicodados.ibge.gov.br/api/v3/agregados/{tabela_id}/metadados"
+                    url_periodos = f"https://servicodados.ibge.gov.br/api/v3/agregados/{tabela_id}/periodos"
+                    try:
+                        res_meta = requests.get(url_meta)
+                        res_anos = requests.get(url_periodos)
+                        if res_meta.status_code == 200:
+                            meta = res_meta.json()
+                            anos_data = res_anos.json() if res_anos.status_code == 200 else []
+                            
+                            st.session_state.meta_nome = meta.get("nome", "Tabela Sem Nome")
+                            st.session_state.anos_disp = ", ".join([str(a["id"]) for a in anos_data]) if anos_data else "Não especificado"
+                            st.session_state.vars_disp = "\n".join([f"[{v['id']}] {v['nome']}" for v in meta.get("variaveis", [])])
+                            
+                            classifs_list = []
+                            sugestoes = []
+                            for c in meta.get("classificacoes", []):
+                                cats = ", ".join([f"{cat['id']}:{cat['nome']}" for cat in c.get("categorias", [])])
+                                classifs_list.append(f"Subvariável [{c['id']}] {c['nome']}:\n   Categorias: {cats}")
+                                sugestoes.append(f"c{c['id']}/all")
+                            
+                            st.session_state.subvars_disp = "\n\n".join(classifs_list)
+                            st.session_state.sugestao_filtro = "/".join(sugestoes)
+                            st.toast("Metadados Atualizados!", icon="✅")
+                        else:
+                            st.error("ID inválido ou erro no IBGE.")
+                    except Exception as e:
+                        st.error(f"Erro de conexão: {str(e)}")
+                        
         st.markdown("---")
+        st.subheader("⚙️ Parâmetros do Filtro")
+        
+        # Filtros idênticos à sua Guia do Excel
+        cod_municipio = st.text_input("Nível Territorial (ex: 6 para Município, 3 para Estado):", value="6")
+        ano_periodo = st.text_input("Ano (Período) (ex: last 1, all, 2022):", value="last 1")
+        variavel = st.text_input("Variável ID (ex: all):", value="all")
+        subvariaveis = st.text_input("Subvariáveis / Classificações:", value=st.session_state.sugestao_filtro)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        # BOTÃO 2: BAIXAR DADOS
+        btn_baixar = st.button("🚀 BAIXAR DADOS DA TABELA", type="primary", use_container_width=True)
 
-    st.header("📥 Dados Baixados")
-    
-    if botao_baixar:
-        # Limpando caracteres não numéricos do território como no seu script original
-        n_limpo = "".join(filter(str.isdigit, n_territorio))
+    with col_outputs:
+        # Se consultou metadados, cria um bloco visual lindo com as infos
+        if st.session_state.meta_nome:
+            st.info(f"📍 **Tabela Selecionada:** {st.session_state.meta_nome}")
+            with st.expander("📂 INFORMAÇÕES E DADOS DISPONÍVEIS (Resultados da Consulta)", expanded=True):
+                sub_tab1, sub_tab2, sub_tab3 = st.tabs(["📅 Anos Disponíveis", "🔢 Variáveis", "🧩 Subvariáveis"])
+                with sub_tab1: st.write(st.session_state.anos_disp)
+                with sub_tab2: st.text(st.session_state.vars_disp)
+                with sub_tab3: st.text(st.session_state.subvars_disp)
         
-        # Montando a URL da API SIDRA
-        url_dados = f"https://apisidra.ibge.gov.br/values/t/{tabela_id}/n6/{n_limpo}/v/{variavel}/p/{periodos}"
+        st.subheader("📥 Dados Extraídos (Sua Aba Dados)")
         
-        if classificacao.strip():
-            filtro_limpo = classificacao.strip() if classificacao.strip().startswith("/") else "/" + classificacao.strip()
-            url_dados += filtro_limpo
+        if btn_baixar:
+            n_limpo = "".join(filter(str.isdigit, cod_municipio))
+            url_dados = f"https://apisidra.ibge.gov.br/values/t/{tabela_id}/n6/{n_limpo}/v/{variavel}/p/{ano_periodo}"
             
-        with st.spinner("Fazendo download dos dados..."):
-            try:
-                res_dados = requests.get(url_dados)
+            if subvariaveis.strip():
+                filtro_limpo = subvariaveis.strip() if subvariaveis.strip().startswith("/") else "/" + subvariaveis.strip()
+                url_dados += filtro_limpo
                 
-                if res_dados.status_code != 200:
-                    st.error(f"Erro no IBGE: {res_dados.text}")
-                else:
-                    json_dados = res_dados.json()
-                    
-                    if "excecao" in json_dados or (isinstance(json_dados, dict) and json_dados.get("D1C")):
-                         st.error(f"Erro retornado pelo SIDRA: {json_dados}")
+            with st.spinner("Processando download do IBGE..."):
+                try:
+                    res_dados = requests.get(url_dados)
+                    if res_dados.status_code == 200:
+                        json_dados = res_dados.json()
+                        
+                        if "excecao" in json_dados:
+                            st.error(f"Erro retornado pelo IBGE: {json_dados['excecao']}")
+                        else:
+                            df = pd.DataFrame(json_dados)
+                            colunas_filtradas = [col for col in df.columns if col.endswith("N") or col in ["V", "MN"]]
+                            df_final = df[colunas_filtradas]
+                            
+                            df_exibicao = df_final[1:].copy()
+                            df_exibicao.columns = df_final.iloc[0]
+                            
+                            st.balloons()
+                            st.success("✅ Download concluído com sucesso!")
+                            
+                            # Tabela Interativa
+                            st.dataframe(df_exibicao, use_container_width=True)
+                            
+                            # Exportação facilitada
+                            csv = df_exibicao.to_csv(index=False).encode('utf-8')
+                            st.download_button(
+                                label="💾 Exportar Tabela para Planilha (CSV)",
+                                data=csv,
+                                file_name=f"sidra_tabela_{tabela_id}.csv",
+                                mime="text/csv",
+                                use_container_width=True
+                            )
                     else:
-                        # Convertendo o JSON para DataFrame do Pandas (equivalente às linhas da Guia Dados)
-                        df = pd.DataFrame(json_dados)
-                        
-                        # Filtro de colunas exatamente igual à sua lógica App Script:
-                        # Pega chaves que terminam com "N" (Nomes), além de "V" (Valor) e "MN" (Unidade de Medida)
-                        colunas_filtradas = [col for col in df.columns if col.endswith("N") or col in ["V", "MN"]]
-                        df_final = df[colunas_filtradas]
-                        
-                        # Ajustando a primeira linha como cabeçalho para ficar bonito visualmente no Streamlit
-                        # O IBGE traz os nomes das colunas na primeira linha de dados
-                        novos_cabecalhos = df_final.iloc[0]
-                        df_exibicao = df_final[1:]
-                        df_exibicao.columns = novos_cabecalhos
-                        
-                        st.success("✅ Download concluído com sucesso!")
-                        
-                        # Exibe a tabela interativa na tela
-                        st.dataframe(df_exibicao, use_container_width=True)
-                        
-                        # Recurso extra do Streamlit: Botão para o usuário baixar em Excel/CSV direto no PC se quiser!
-                        csv = df_exibicao.to_csv(index=False).encode('utf-8')
-                        st.download_button(
-                            label="📥 Baixar esta tabela em CSV",
-                            data=csv,
-                            file_name=f"sidra_tabela_{tabela_id}.csv",
-                            mime="text/csv",
-                        )
-                        
-            except Exception as e:
-                st.error(f"Erro ao processar dados: {str(e)}")
-    else:
-        st.info("Preencha os parâmetros à esquerda e clique em 'Baixar Dados' para visualizar a tabela aqui.")
+                        st.error("Erro na resposta do IBGE.")
+                except Exception as e:
+                    st.error(f"Erro técnico: {str(e)}")
+        else:
+            st.info("Aguardando comandos. Preencha os campos e clique em **BAIXAR DADOS DA TABELA**.")
+
+# =========================================================
+# ABA: TUTORIAL DE SUBVARIÁVEIS
+# =========================================================
+elif aba_ativa == "💡 Tutorial Interativo":
+    st.title("💡 Tutorial de Subvariáveis (Sua Aba Tutorial)")
+    st.markdown("Guia rápido de como preencher o campo de classificações sem travar o script.")
+    st.markdown("---")
+    
+    st.markdown("""
+    <div class="card-tutorial">
+        <h3>📍 A Estrutura Básica</h3>
+        <p>O formato que você deve digitar (ou que o robô sugere) é sempre: <b>c[CÓDIGO]/[CATEGORIA]</b></p>
+        <ul>
+            <li><b>c</b>: Letra obrigatória que indica "Classificação".</li>
+            <li><b>[CÓDIGO]</b>: O número do grupo (ex: 1 para Sexo, 2 para Cor).</li>
+            <li><b>all</b>: Palavra mágica que baixa todos os itens daquele grupo.</li>
+            <li><b>/ (Barra)</b>: Separador para adicionar mais filtros.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Tabela dinâmica de exemplos baseada na sua planilha original do vídeo
+    st.subheader("🛠️ Exemplos Práticos de Preenchimento")
+    exemplos = {
+        "O que você quer": ["Tudo detalhado", "Apenas um item", "Vários itens específicos", "Total Geral"],
+        "O que digitar no campo": ["c1/all/c2/all", "c1/1", "c1/1,2", "(Deixar Vazio)"],
+        "Explicação Prática": [
+            "Baixa todos os Sexos (c1) e todas as Cores (c2) abertos.",
+            "Se 1 for o código para 'Homens', baixa apenas homens.",
+            "Baixa os itens 1 e 2 (ex: Homens e Mulheres), ignorando o resto.",
+            "Se deixar a caixinha vazia, o IBGE ignora divisões e traz apenas a soma total da cidade."
+        ]
+    }
+    st.table(pd.DataFrame(exemplos))
