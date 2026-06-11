@@ -4,7 +4,7 @@ import pandas as pd
 
 # CONFIGURAÇÃO DE DESIGN DA PÁGINA
 st.set_page_config(
-    page_title="ROBÔ SIDRA v5.6",
+    page_title="SIDRA v5.6 ☠",
     page_icon="📊",
     layout="wide"
 )
@@ -78,7 +78,7 @@ if "sugestao_filtro" not in st.session_state: st.session_state.sugestao_filtro =
 # =========================================================
 # NAVEGAÇÃO POR MENU LATERAL (Estilo Abas do Excel)
 # =========================================================
-st.sidebar.title("📊 CONTROLE DO ROBÔ")
+st.sidebar.title("📊 DADOS SIDRA")
 aba_ativa = st.sidebar.radio(
     "Navegar para:",
     ["📋 Guia Principal (Robô)", "📖 Catálogo (Consultas)", "💡 Tutorial Interativo"]
