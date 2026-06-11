@@ -4,7 +4,7 @@ import pandas as pd
 
 # CONFIGURAÇÃO DE DESIGN DA PÁGINA
 st.set_page_config(
-    page_title="SIDRA v5.6 ☠",
+    page_title="SIDRA v5.6",
     page_icon="📊",
     layout="wide"
 )
@@ -81,7 +81,7 @@ if "sugestao_filtro" not in st.session_state: st.session_state.sugestao_filtro =
 st.sidebar.title("📊 DADOS SIDRA")
 aba_ativa = st.sidebar.radio(
     "Navegar para:",
-    ["📋 Guia Principal (Robô)", "📖 Catálogo (Consultas)", "💡 Tutorial Interativo"]
+    ["📋 Guia Principal", "📖 Catálogo (Consultas)", "💡 Tutorial Interativo"]
 )
 
 st.sidebar.markdown("---")
@@ -113,8 +113,8 @@ if aba_active := aba_ativa == "📖 Catálogo (Consultas)":
 # =========================================================
 # ABA: GUIA PRINCIPAL (O CORAÇÃO DO ROBÔ)
 # =========================================================
-elif aba_ativa == "📋 Guia Principal (Robô)":
-    st.title("🤖 Robô SIDRA v5.6")
+elif aba_ativa == "📋 Guia Principal":
+    st.title("SIDRA v5.6")
     st.caption("Insira os dados à esquerda e veja a mágica acontecer à direita")
     st.markdown("---")
     
