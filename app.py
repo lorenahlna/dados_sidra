@@ -9,7 +9,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Customização visual premium (Azul IBGE e cinza corporativo)
+# Customização visual 
 st.markdown("""
     <style>
     .main { background-color: #f4f6f9; }
@@ -22,21 +22,28 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# CARREGAMENTO INTELIGENTE E DINÂMICO DO ARQUIVO REPOSITÓRIO
+# CARREGAMENTO ARQUIVO REPOSITÓRIO
 # ---------------------------------------------------------
 @st.cache_data
 def carregar_dados_catalogo():
     try:
-        # Lê o arquivo que está na mesma pasta do seu repositório GitHub
-        df = pd.read_csv('tabelas.csv', dtype={'ID': str})
+        # Lê o arquivo JSON estável que está no seu repositório
+        df = pd.read_json('tabelas.json', dtype={'ID': str})
         return df
     except Exception as e:
-        # Caso o arquivo suma ou dê erro, ele cria uma linha de aviso para não travar o app
-        return pd.DataFrame([{"Grupo": "Erro", "Assunto": "Erro", "ID": "9606", "Nome": "Arquivo tabelas.csv não encontrado", "Anos": "-", "Descrição": str(e)}])
+        # Caso o arquivo dê erro ou não seja encontrado, cria um aviso para não travar o app
+        return pd.DataFrame([{
+            "Grupo": "Erro", 
+            "Assunto": "Erro", 
+            "ID": "9606", 
+            "Nome": "Arquivo tabelas.json não encontrado ou inválido", 
+            "Anos": "-", 
+            "Descrição": str(e)
+        }])
 
 df_catalogo = carregar_dados_catalogo()
 
-# Estado da sessão para não perder variáveis no clique e transferir entre abas
+# Estado da sessão para não perder variáveis no clique e transferir entre as telas
 if "id_selecionado" not in st.session_state: st.session_state.id_selecionado = "9606"
 if "localidade_selecionada" not in st.session_state: st.session_state.localidade_selecionada = "all"
 if "nivel_territorial" not in st.session_state: st.session_state.nivel_territorial = "6"
@@ -47,7 +54,7 @@ if "subvars_disp" not in st.session_state: st.session_state.subvars_disp = ""
 if "sugestao_filtro" not in st.session_state: st.session_state.sugestao_filtro = ""
 
 # =========================================================
-# NAVEGAÇÃO POR MENU LATERAL (Estilo Abas do Excel)
+# NAVEGAÇÃO POR MENU LATERAL 
 # =========================================================
 st.sidebar.title("📊 DADOS SIDRA")
 aba_ativa = st.sidebar.radio(
@@ -60,13 +67,13 @@ st.sidebar.markdown("### 🗺️ Parâmetros Ativos:")
 st.sidebar.info(f"**Tabela ID:** {st.session_state.id_selecionado}\n\n**Cód. Local:** {st.session_state.localidade_selecionada}")
 
 # =========================================================
-# ABA: CATALOGO DE CONSULTAS (LENDO DO REPOSITÓRIO)
+# ABA: CATALOGO DE CONSULTAS (LENDO DO REPOSITÓRIO JSON)
 # =========================================================
 if aba_ativa == "📖 Catálogo (Consultas)":
     st.title("📖 Catálogo de Tabelas (Sua Aba Consultas)")
-    st.markdown("Esta lista é alimentada diretamente pelo arquivo `tabelas.csv` do seu repositório. Clique em qualquer linha para escolher e ativar.")
+    st.markdown("Esta lista é alimentada pelo arquivo `tabelas.json` do seu repositório. Clique abaixo para ativar.")
     
-    # Exibe a tabela lida do CSV
+    # Exibe a tabela lida do JSON
     st.dataframe(df_catalogo, use_container_width=True, hide_index=True)
     
     st.subheader("🎯 Ativação Rápida:")
@@ -77,7 +84,6 @@ if aba_ativa == "📖 Catálogo (Consultas)":
             with st.expander(f"📁 Tabelas de {g}"):
                 sub_df = df_catalogo[df_catalogo["Grupo"] == g]
                 for _, row in sub_df.iterrows():
-                    # Garante que o ID seja tratado estritamente como string limpa
                     id_limpo = str(row['ID']).strip()
                     if st.button(f"Ativar Tabela {id_limpo} - {row['Nome']}", key=f"btn_{id_limpo}"):
                         st.session_state.id_selecionado = id_limpo
@@ -128,7 +134,6 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
                         municipio_escolhido = st.selectbox(f"Encontramos {len(filtrados)} resultados. Selecione o correto:", list(opcoes_mun.keys()))
                         
                         id_final_mun = opcoes_mun[municipio_escolhido]
-                        
                         st.markdown(f"**Código de 7 dígitos encontrado:** `{id_final_mun}`")
                         
                         if st.button("🚀 Ativar Município e Direcionar para Pesquisa", type="primary"):
@@ -139,7 +144,7 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
                         st.error("Nenhum município encontrado com este nome. Tente digitar de outra forma.")
 
 # =========================================================
-# ABA: GUIA PRINCIPAL (O CORAÇÃO DO ROBÔ)
+# GUIA PRINCIPAL
 # =========================================================
 elif aba_ativa == "📋 Guia Principal":
     st.title("SIDRA v5.6")
@@ -190,7 +195,7 @@ elif aba_ativa == "📋 Guia Principal":
         st.markdown("---")
         st.subheader("⚙️ Parâmetros do Filtro")
         
-        # Agora os campos recebem os dados dinâmicos do session_state vindos da busca de localidade ou do catálogo
+        # Recebe os dados dinâmicos salvos nas abas de Catálogo e Localidades
         cod_territorio = st.text_input("Nível Territorial (1=Brasil, 3=Estado, 6=Município):", value=st.session_state.nivel_territorial)
         cod_municipio = st.text_input("Cód. Localidade / Município (all ou id de 7 dígitos):", value=st.session_state.localidade_selecionada)
         
@@ -231,7 +236,7 @@ elif aba_ativa == "📋 Guia Principal":
                         json_dados = res_dados.json()
                         
                         if "excecao" in json_dados or (isinstance(json_dados, dict) and json_dados.get("D1C")):
-                            st.error(f"Erro retornado pelo IBGE. Verifique os parâmetros.")
+                            st.error(f"Erro retornado pelo IBGE. Verifique os parâmetros informados.")
                         else:
                             df = pd.DataFrame(json_dados)
                             colunas_filtradas = [col for col in df.columns if col.endswith("N") or col in ["V", "MN"]]
