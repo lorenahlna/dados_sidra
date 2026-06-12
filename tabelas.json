@@ -1,37 +1,38 @@
-Grupo,Assunto,ID,Nome,Anos,Descrição
-Demografia,Cor ou Raça,9606,População por Cor e Idade,"2000, 2010","População residente, por cor ou raça, segundo o sexo e a idade"
-Demografia,População,475,População por Idade e Sexo,1996,População residente por grupos de idade, sexo e situação
-Demografia,População,202,População por Sexo e Situação,"2000, 2010",População residente, por sexo e situação do domicílio
-Demografia,População,9923,População por Situação,2022,População residente, por situação do domicílio
-Demografia,Estimativas de População,6579,Estimativa Populacional Anual,2001-2024,População residente estimada
-Demografia,Nascimentos,197,Nascidos Vivos por Idade da Mãe,2000-2002,Nascidos vivos ocorridos no ano por grupos de idade da mãe na ocasião do parto e sexo
-Demografia,Nascimentos,2647,Nascidos Vivos por Mês e Sexo,2003-2023,"Nascidos vivos, ocorrido no ano, por mês do registro, sexo, local de nascimento ...."
-Demografia,População,1552,População por Idade e Sexo,"2000, 2010",População residente, por situação do domicílio e sexo, segundo a forma de declaração da idade e a idade
-Demografia,População,9514,População por Idade e Sexo,2022,"População residente, por sexo, idade e forma de declaração da idade"
-Demografia,Óbitos,2684,Óbitos por Idade e Sexo,2003-2023,"Óbitos, por ano de ocorrência, natureza do óbito, sexo, idade, local de ocorrência e lugar do registro"
-Demografia,Migração,3207,Migrantes Recentes,2010,"Pessoas de 5 anos ou mais de idade que não residiam no município em 31/07/2005, por sexo, situação do domicílio e grupos de idade"
-Demografia,Deficiência Permanente,1495,Pessoas com Deficiência,2010,População residente, por tipo de deficiência permanente - Resultados Gerais da Amostra
-Demografia,Deficiência Permanente,2111,Deficiência por Idade e Sexo,2010,População residente por tipo de deficiência, situação do domicílio, sexo e grupos de idade
-Demografia,Emigração Nacional,3172,Emigrantes por Sexo e UF,2010,"Emigrantes internacionais, por sexo, segundo as Grandes Regiões e Unidades da Federação das pessoas com quem residiram antes de emigrarem"
-Demografia,Emigração Internacional,3173,Emigrantes por País Destino,2010,Emigrantes internacionais, por sexo, segundo os continentes e países estrangeiros de destino
-Economia Finanças e Emprego,PIB dos Municípios,5938,PIB Municipal,2002-2022,Produto interno bruto a preços correntes, impostos...
-Economia Finanças e Emprego,Rendimento do Trabalho,3552,Rendimento Médio Mensal,2010,Valor do rendimento nominal médio mensal de todos os trabalhos...
-Economia Finanças e Emprego,Estatísticas das Empresas,1685,Empresas e Empregos (CEMPRE),1996-2022,"Unidades locais, empresas e outras organizações atuantes..."
-Economia Finanças e Emprego,Ocupação por Setor,3602,Pessoas Ocupadas por Atividade,2010,"Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência..."
-Economia Finanças e Emprego,Condição de Atividade,616,Mercado de Trabalho,2010,Pessoas de 10 anos ou mais de idade por grupos de idade...
-Economia Finanças e Emprego,Estatísticas das Empresas,993,Empresas por CNAE (CEMPRE Antiga),2007-2021,Empresas e outras organizações, por seção da classificação de atividades...
-Economia Finanças e Emprego,Estatísticas das Empresas,9582,Empresas por CNAE (CEMPRE Nova),2021-2022,Empresas e outras organizações, por seção da classificação de atividades...
-Economia Finanças e Emprego,Rendimento do Responsável,1494,Renda do Responsável,2010,Pessoas responsáveis pelos domicílios particulares permanentes...
-Educação,Alfabetização,9543,Taxa de Alfabetização,2022,Taxa de alfabetização das pessoas de 15 anos ou mais de idade...
-Mobilidade Transporte e Trânsito,Deslocamento Casa-Trabalho,3604,Tempo de Deslocamento,2010,"Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência..."
-Saneamento e Condições de Moradia,Infraestrutura do Domicílio,3504,Densidade, Água e Esgoto,2010,Domicílios particulares permanentes, por densidade de moradores...
-Saneamento e Condições de Moradia,Abastecimento de Água,2420,Abastecimento de Água,2000,Domicílios particulares permanentes e Moradores...
-Saneamento e Condições de Moradia,Esgotamento Sanitário,2421,Esgotamento Sanitário,2000,Domicílios particulares permanentes e Moradores...
-Saneamento e Condições de Moradia,Lixo em Aglomerados Subnormais,3384,Lixo em Favelas,2010,"Domicílios particulares permanentes em aglomerados subnormais..."
-Saneamento e Condições de Moradia,Serviços e Bens Duráveis,2408,Bens Duráveis no Domicílio,2000,Domicílios particulares permanentes e Moradores...
-Saneamento e Condições de Moradia,Condição de Ocupação,2419,Ocupação do Domicílio,2000,Domicílios particulares permanentes e Moradores...
-Saneamento e Condições de Moradia,Pesquisa Urbanística de Entorno,6591,Entorno dos Domicílios,2010,Moradores em domicílios particulares permanentes ocupados...
-Saneamento e Condições de Moradia,Abastecimento de Água (Entorno),6751,Água no Entorno Urbano,2010,Domicílios particulares permanentes ocupados e moradores...
-Saneamento e Condições de Moradia,Características dos Domicílios,6326,Tipos de Domicílio,2010,"Domicílios particulares permanentes ocupados, por tipo de domicílio"
-Saneamento e Condições de Moradia,Esgotamento Sanitário,6805,Esgotamento Sanitário,2010,"Domicílios particulares permanentes ocupados, por tipo de esgotamento sanitário"
-Saneamento e Condições de Moradia,Destino do Lixo,6892,Destino do Lixo,2010,"Domicílios particulares permanentes ocupados, por destino do lixo"
+[
+  {"Grupo": "Demografia", "Assunto": "Cor ou Raça", "ID": "9606", "Nome": "População por Cor e Idade", "Anos": "2000, 2010", "Descrição": "População residente, por cor ou raça, segundo o sexo e a idade"},
+  {"Grupo": "Demografia", "Assunto": "População", "ID": "475", "Nome": "População por Idade e Sexo", "Anos": "1996", "Descrição": "População residente por grupos de idade, sexo e situação"},
+  {"Grupo": "Demografia", "Assunto": "População", "ID": "202", "Nome": "População por Sexo e Situação", "Anos": "2000, 2010", "Descrição": "População residente, por sexo e situação do domicílio"},
+  {"Grupo": "Demografia", "Assunto": "População", "ID": "9923", "Nome": "População por Situação", "Anos": "2022", "Descrição": "População residente, por situação do domicílio"},
+  {"Grupo": "Demografia", "Assunto": "Estimativas de População", "ID": "6579", "Nome": "Estimativa Populacional Anual", "Anos": "2001-2024", "Descrição": "População residente estimada"},
+  {"Grupo": "Demografia", "Assunto": "Nascimentos", "ID": "197", "Nome": "Nascidos Vivos por Idade da Mãe", "Anos": "2000-2002", "Descrição": "Nascidos vivos ocorridos no ano por grupos de idade da mãe na ocasião do parto e sexo"},
+  {"Grupo": "Demografia", "Assunto": "Nascimentos", "ID": "2647", "Nome": "Nascidos Vivos por Mês e Sexo", "Anos": "2003-2023", "Descrição": "Nascidos vivos, ocorrido no ano, por mês do registro, sexo, local de nascimento ...."},
+  {"Grupo": "Demografia", "Assunto": "População", "ID": "1552", "Nome": "População por Idade e Sexo", "Anos": "2000, 2010", "Descrição": "População residente, por situação do domicílio e sexo, segundo a forma de declaração da idade e a idade"},
+  {"Grupo": "Demografia", "Assunto": "População", "ID": "9514", "Nome": "População por Idade e Sexo", "Anos": "2022", "Descrição": "População residente, por sexo, idade e forma de declaração da idade"},
+  {"Grupo": "Demografia", "Assunto": "Óbitos", "ID": "2684", "Nome": "Óbitos por Idade e Sexo", "Anos": "2003-2023", "Descrição": "Óbitos, por ano de ocorrência, natureza do óbito, sexo, idade, local de ocorrência e lugar do registro"},
+  {"Grupo": "Demografia", "Assunto": "Migração", "ID": "3207", "Nome": "Migrantes Recentes", "Anos": "2010", "Descrição": "Pessoas de 5 anos ou mais de idade que não residiam no município em 31/07/2005, por sexo, situação do domicílio e grupos de idade"},
+  {"Grupo": "Demografia", "Assunto": "Deficiência Permanente", "ID": "1495", "Nome": "Pessoas com Deficiência", "Anos": "2010", "Descrição": "População residente, por tipo de deficiência permanente - Resultados Gerais da Amostra"},
+  {"Grupo": "Demografia", "Assunto": "Deficiência Permanente", "ID": "2111", "Nome": "Deficiência por Idade e Sexo", "Anos": "2010", "Descrição": "População residente por tipo de deficiência, situação do domicílio, sexo e grupos de idade"},
+  {"Grupo": "Demografia", "Assunto": "Emigração Nacional", "ID": "3172", "Nome": "Emigrantes por Sexo e UF", "Anos": "2010", "Descrição": "Emigrantes internacionais, por sexo, segundo as Grandes Regiões e Unidades da Federação das pessoas com quem residiram antes de emigrarem"},
+  {"Grupo": "Demografia", "Assunto": "Emigração Internacional", "ID": "3173", "Nome": "Emigrantes por País Destino", "Anos": "2010", "Descrição": "Emigrantes internacionais, por sexo, segundo os continentes e países estrangeiros de destino"},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "PIB dos Municípios", "ID": "5938", "Nome": "PIB Municipal", "Anos": "2002-2022", "Descrição": "Produto interno bruto a preços correntes, impostos, líquidos de subsídios, sobre produtos a preços correntes e valor adicionado bruto a preços correntes total e por atividade econômica, e respectivas participações"},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Rendimento do Trabalho", "ID": "3552", "Nome": "Rendimento Médio Mensal", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência, Valor do rendimento nominal médio mensal, e mediano mensal, de todos os trabalhos..."},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Estatísticas das Empresas", "ID": "1685", "Nome": "Empresas e Empregos (CEMPRE)", "Anos": "1996-2022", "Descrição": "Unidades locais, empresas e outras organizações atuantes, pessoal ocupado total, pessoal ocupado assalariado..."},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Ocupação por Setor", "ID": "3602", "Nome": "Pessoas Ocupadas por Atividade", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência, por local de exercício do trabalho principal..."},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Condição de Atividade", "ID": "616", "Nome": "Mercado de Trabalho", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade por grupos de idade, condição de atividade na semana de referência..."},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Estatísticas das Empresas", "ID": "993", "Nome": "Empresas por CNAE (CEMPRE Antiga)", "Anos": "2007-2021", "Descrição": "Empresas e outras organizações, por seção da classificação de atividades (CNAE 2.0)..."},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Estatísticas das Empresas", "ID": "9582", "Nome": "Empresas por CNAE (CEMPRE Nova)", "Anos": "2021-2022", "Descrição": "Empresas e outras organizações, por seção da classificação de atividades (CNAE 2.0)..."},
+  {"Grupo": "Economia Finanças e Emprego", "Assunto": "Rendimento do Responsável", "ID": "1494", "Nome": "Renda do Responsável", "Anos": "2010", "Descrição": "Pessoas responsáveis pelos domicílios particulares permanentes por situação, sexo..."},
+  {"Grupo": "Educação", "Assunto": "Alfabetização", "ID": "9543", "Nome": "Taxa de Alfabetização", "Anos": "2022", "Descrição": "Taxa de alfabetização das pessoas de 15 anos ou mais de idade por sexo, cor ou raça..."},
+  {"Grupo": "Mobilidade Transporte e Trânsito", "Assunto": "Deslocamento Casa-Trabalho", "ID": "3604", "Nome": "Tempo de Deslocamento", "Anos": "2010", "Descrição": "Pessoas de 10 anos ou mais de idade, ocupadas na semana de referência, que, no trabalho principal, trabalhavam fora do domicílio..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Infraestrutura do Domicílio", "ID": "3504", "Nome": "Densidade, Água e Esgoto", "Anos": "2010", "Descrição": "Domicílios particulares permanentes, por densidade de moradores por cômodo, segundo o tipo de domicílio..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Abastecimento de Água", "ID": "2420", "Nome": "Abastecimento de Água", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores em Domicílios particulares permanentes..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Esgotamento Sanitário", "ID": "2421", "Nome": "Esgotamento Sanitário", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores em Domicílios particulares permanentes..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Lixo em Aglomerados Subnormais", "ID": "3384", "Nome": "Lixo em Favelas", "Anos": "2010", "Descrição": "Domicílios particulares permanentes em aglomerados subnormais, por destino do lixo"},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Serviços e Bens Duráveis", "ID": "2408", "Nome": "Bens Duráveis no Domicílio", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores em Domicílios particulares permanentes..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Condição de Ocupação", "ID": "2419", "Nome": "Ocupação do Domicílio", "Anos": "2000", "Descrição": "Domicílios particulares permanentes e Moradores em Domicílios particulares permanentes..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Pesquisa Urbanística de Entorno", "ID": "6591", "Nome": "Entorno dos Domicílios", "Anos": "2010", "Descrição": "Moradores em domicílios particulares permanentes ocupados, em setores censitários selecionados..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Abastecimento de Água (Entorno)", "ID": "6751", "Nome": "Água no Entorno Urbano", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados e moradores em domicílios particulares permanentes ocupados..."},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Características dos Domicílios", "ID": "6326", "Nome": "Tipos de Domicílio", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados, por tipo de domicílio"},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Esgotamento Sanitário", "ID": "6805", "Nome": "Esgotamento Sanitário", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados, por tipo de esgotamento sanitário"},
+  {"Grupo": "Saneamento e Condições de Moradia", "Assunto": "Destino do Lixo", "ID": "6892", "Nome": "Destino do Lixo", "Anos": "2010", "Descrição": "Domicílios particulares permanentes ocupados, por destino do lixo"}
+]
