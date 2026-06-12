@@ -70,8 +70,8 @@ st.sidebar.info(f"**Tabela ID:** {st.session_state.id_selecionado}\n\n**Cód. Lo
 # ABA: CATALOGO DE CONSULTAS (LENDO DO REPOSITÓRIO JSON)
 # =========================================================
 if aba_ativa == "📖 Catálogo (Consultas)":
-    st.title("📖 Catálogo de Tabelas (Sua Aba Consultas)")
-    st.markdown("Esta lista é alimentada pelo arquivo `tabelas.json` do seu repositório. Clique abaixo para ativar.")
+    st.title("📖 Catálogo de Tabelas")
+    st.markdown("Selecione uma tabela no catálogo abaixo para configurar os filtros automaticamente.")
     
     # Exibe a tabela lida do JSON
     st.dataframe(df_catalogo, use_container_width=True, hide_index=True)
