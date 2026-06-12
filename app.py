@@ -193,7 +193,7 @@ elif aba_ativa == "📋 Guia Principal":
                         st.error(f"Erro de conexão: {str(e)}")
                         
         st.markdown("---")
-        st.subheader("⚙️ Parâmetros do Filtro")
+        st.subheader("⚙️Filtro")
         
         # Recebe os dados dinâmicos salvos nas abas de Catálogo e Localidades
         cod_territorio = st.text_input("Nível Territorial (1=Brasil, 3=Estado, 6=Município):", value=st.session_state.nivel_territorial)
