@@ -211,13 +211,13 @@ elif aba_ativa == "📋 Guia Principal":
     with col_outputs:
         if st.session_state.meta_nome:
             st.info(f"📍 **Tabela Selecionada:** {st.session_state.meta_nome}")
-            with st.expander("📂 INFORMAÇÕES E DADOS DISPONÍVEIS (Resultados da Consulta)", expanded=True):
+            with st.expander("📂 INFORMAÇÕES E DADOS DISPONÍVEIS", expanded=True):
                 sub_tab1, sub_tab2, sub_tab3 = st.tabs(["📅 Anos Disponíveis", "🔢 Variáveis", "🧩 Subvariáveis"])
                 with sub_tab1: st.write(st.session_state.anos_disp)
                 with sub_tab2: st.text(st.session_state.vars_disp)
                 with sub_tab3: st.text(st.session_state.subvars_disp)
         
-        st.subheader("📥 Dados Extraídos (Sua Aba Dados)")
+        st.subheader("📥 Dados Extraídos")
         
         if btn_baixar:
             n_limpo = "".join(filter(str.isdigit, cod_territorio))
@@ -276,7 +276,7 @@ elif aba_ativa == "💡 Tutorial Interativo":
     st.markdown("""
     <div class="card-tutorial">
         <h3>📍 A Estrutura Básica</h3>
-        <p>O formato que você deve digitar (ou que o robô sugere) é sempre: <b>c[CÓDIGO]/[CATEGORIA]</b></p>
+        <p>O formato que você deve digitar é sempre: <b>c[CÓDIGO]/[CATEGORIA]</b></p>
         <ul>
             <li><b>c</b>: Letra obrigatória que indica "Classificação".</li>
             <li><b>[CÓDIGO]</b>: O número do grupo (ex: 1 para Sexo, 2 para Cor).</li>
