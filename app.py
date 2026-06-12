@@ -120,7 +120,7 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
                     st.success(f"Estado ativado com sucesso! Código: {opcoes_uf[uf_escolhida]}")
                     
     elif tipo_busca == "Município":
-        termo_busca = st.text_input("Digite o nome da cidade (Ex: Belo Horizonte, Redenção...):", value="").strip()
+        termo_busca = st.text_input("Digite o nome da cidade (Ex: Belo Horizonte, São Paulo...):", value="").strip()
         
         if termo_busca:
             with st.spinner("Consultando municípios na API do IBGE..."):
@@ -148,7 +148,7 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
 # =========================================================
 elif aba_ativa == "📋 Guia Principal":
     st.title("SIDRA v5.6")
-    st.caption("Insira os dados à esquerda e veja a mágica acontecer à direita")
+    st.caption("Insira os dados à esquerda")
     st.markdown("---")
     
     col_inputs, col_outputs = st.columns([1, 2])
@@ -269,8 +269,8 @@ elif aba_ativa == "📋 Guia Principal":
 # ABA: TUTORIAL DE SUBVARIÁVEIS
 # =========================================================
 elif aba_ativa == "💡 Tutorial Interativo":
-    st.title("💡 Tutorial de Subvariáveis (Sua Aba Tutorial)")
-    st.markdown("Guia rápido de como preencher o campo de classificações sem travar o script.")
+    st.title("💡 Tutorial de Subvariáveis")
+    st.markdown("Guia rápido de como preencher os filtros.")
     st.markdown("---")
     
     st.markdown("""
