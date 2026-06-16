@@ -9,130 +9,15 @@ st.set_page_config(
     layout="wide"
 )
 
-# Customização visual avançada (Identidade Visual Matrix Cyberpunk)
+# Customização visual 
 st.markdown("""
     <style>
-    /* Fundo Preto Profundo e Fonte Estilo Terminal */
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap');
-    
-    .stApp {
-        background-color: #050505;
-        font-family: 'Fira Code', monospace !important;
-        color: #00FF66 !important;
-    }
-    
-    /* Títulos em Neon */
-    h1, h2, h3 { 
-        color: #00F0FF !important; 
-        font-family: 'Fira Code', monospace !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-    }
-    
-    h1 { letter-spacing: -0.02em; margin-bottom: 1rem !important; }
-    
-    /* Menu Lateral Dark Cyber */
-    [data-testid="stSidebar"] {
-        background-color: #0A0A0A !important;
-        border-right: 1px solid #00FF66;
-    }
-    [data-testid="stSidebar"] h3 {
-        font-size: 0.9rem !important;
-        letter-spacing: 0.1em;
-        color: #00F0FF !important;
-        text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
-    }
-    
-    /* Radio Buttons no Menu Lateral */
-    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
-        color: #00FF66 !important;
-    }
-
-    /* Botões Estilo Hackerspace */
-    .stButton>button { 
-        border-radius: 4px !important; 
-        font-family: 'Fira Code', monospace !important;
-        font-weight: 600 !important; 
-        transition: all 0.2s ease-in-out !important;
-        padding: 0.6rem 1.2rem !important;
-        background-color: transparent !important;
-    }
-    
-    /* Botão Primário (Baixar) - Rosa Neon Cyberpunk */
-    .stButton>button[kind="primary"] {
-        color: #FF0055 !important;
-        border: 1px solid #FF0055 !important;
-        box-shadow: 0 0 8px rgba(255, 0, 85, 0.3) !important;
-    }
-    .stButton>button[kind="primary"]:hover { 
-        background-color: #FF0055 !important; 
-        color: #000000 !important;
-        box-shadow: 0 0 15px rgba(255, 0, 85, 0.8) !important;
-    }
-    
-    /* Botão Secundário (Consultar) - Verde Matrix */
-    .stButton>button[kind="secondary"] {
-        color: #00FF66 !important;
-        border: 1px solid #00FF66 !important;
-        box-shadow: 0 0 8px rgba(0, 255, 102, 0.3) !important;
-    }
-    .stButton>button[kind="secondary"]:hover { 
-        background-color: #00FF66 !important; 
-        color: #000000 !important;
-        box-shadow: 0 0 15px rgba(0, 255, 102, 0.8) !important;
-    }
-    
-    /* Grid de Dados e Tabelas Estilo Terminal */
-    div[data-testid="stDataFrame"] {
-        background-color: #0A0A0A !important;
-        border: 1px solid #00FF66 !important;
-    }
-    
-    /* Containers e Expanders Netrunner */
-    div[data-testid="stExpander"] { 
-        background-color: #0A0A0A !important; 
-        border: 1px solid #00F0FF !important;
-        border-radius: 4px !important; 
-    }
-    
-    .card-tutorial { 
-        background-color: #0A0A0A; 
-        padding: 20px; 
-        border: 1px solid #00F0FF;
-        border-left: 5px solid #00F0FF; 
-        border-radius: 4px;
-        box-shadow: 0 0 10px rgba(0, 240, 255, 0.2) !important;
-    }
-    .card-tutorial h3 { color: #00F0FF !important; }
-    
-    /* Inputs de Texto (Linhas de Comando) */
-    div[data-testid="stTextInput"] input {
-        background-color: #0A0A0A !important;
-        color: #00FF66 !important;
-        border-radius: 4px !important;
-        border: 1px solid #333333 !important;
-        font-family: 'Fira Code', monospace !important;
-    }
-    div[data-testid="stTextInput"] input:focus {
-        border-color: #00FF66 !important;
-        box-shadow: 0 0 10px rgba(0, 255, 102, 0.5) !important;
-    }
-    
-    /* Tabs Internas */
-    button[data-baseweb="tab"] {
-        color: #64748B !important;
-    }
-    button[aria-selected="true"] {
-        color: #00FF66 !important;
-        border-bottom-color: #00FF66 !important;
-    }
-    
-    /* Caixas de Alerta e Avisos Customizadas */
-    div[data-testid="stAlert"] {
-        background-color: #0A0A0A !important;
-        color: #00FF66 !important;
-        border: 1px solid #00FF66 !important;
-    }
+    .main { background-color: #f4f6f9; }
+    h1, h2, h3 { color: #003399 !important; font-family: 'Segoe UI', sans-serif; }
+    .stButton>button { border-radius: 8px; font-weight: bold; background-color: #003399; color: white; }
+    .stButton>button:hover { background-color: #002266; color: white; }
+    div[data-testid="stExpander"] { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .card-tutorial { background-color: #e6f0ff; padding: 15px; border-left: 5px solid #003399; border-radius: 4px; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -142,9 +27,11 @@ st.markdown("""
 @st.cache_data
 def carregar_dados_catalogo():
     try:
+        # Lê o arquivo JSON estável que está no seu repositório
         df = pd.read_json('tabelas.json', dtype={'ID': str})
         return df
     except Exception as e:
+        # Caso o arquivo dê erro ou não seja encontrado, cria um aviso para não travar o app
         return pd.DataFrame([{
             "Grupo": "Erro", 
             "Assunto": "Erro", 
@@ -156,7 +43,7 @@ def carregar_dados_catalogo():
 
 df_catalogo = carregar_dados_catalogo()
 
-# Estado da sessão
+# Estado da sessão para não perder variáveis no clique e transferir entre as telas
 if "id_selecionado" not in st.session_state: st.session_state.id_selecionado = "9606"
 if "localidade_selecionada" not in st.session_state: st.session_state.localidade_selecionada = "all"
 if "nivel_territorial" not in st.session_state: st.session_state.nivel_territorial = "6"
@@ -180,12 +67,13 @@ st.sidebar.markdown("### 🗺️ Parâmetros Ativos:")
 st.sidebar.info(f"**Tabela ID:** {st.session_state.id_selecionado}\n\n**Cód. Local:** {st.session_state.localidade_selecionada}")
 
 # =========================================================
-# ABA: CATALOGO DE CONSULTAS
+# ABA: CATALOGO DE CONSULTAS (LENDO DO REPOSITÓRIO JSON)
 # =========================================================
 if aba_ativa == "📖 Catálogo (Consultas)":
     st.title("📖 Catálogo de Tabelas")
     st.markdown("Selecione uma tabela no catálogo abaixo para configurar os filtros automaticamente.")
     
+    # Exibe a tabela lida do JSON
     st.dataframe(df_catalogo, use_container_width=True, hide_index=True)
     
     st.subheader("🎯 Ativação Rápida:")
@@ -202,7 +90,7 @@ if aba_ativa == "📖 Catálogo (Consultas)":
                         st.success(f"Tabela {id_limpo} ativada! Vá para a '📋 Guia Principal' para rodar.")
 
 # =========================================================
-# ABA: CONSULTA DE LOCALIDADES
+# ABA: CONSULTA DE LOCALIDADES (AUTOMÁTICA)
 # =========================================================
 elif aba_ativa == "📍 Localidades (Cód. IBGE)":
     st.title("📍 Localizador de Municípios e Estados")
@@ -261,14 +149,11 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
 elif aba_ativa == "📋 Guia Principal":
     st.title("SidraX")
     
-    st.markdown("### 🚀 Fluxo de Trabalho Recomendado")
-    p1, p2, p3 = st.columns(3)
-    with p1:
-        st.info("💡 **1. Aprenda os Filtros**\nAcesse a aba **Tutorial** para entender a lógica de variáveis do IBGE.")
-    with p2:
-        st.info("📍 **2. Defina o Local**\nConfigure a sua região geográfica alvo na aba **Localidades**.")
-    with p3:
-        st.info("📖 **3. Escolha a Tabela**\nAtive o conjunto de dados desejado na aba **Catálogo**.")
+    # CORREÇÃO AQUI: Mudado para aspas triplas para aceitar quebras de linha sem erro
+    st.caption("🎯 **Como começar a sua consulta:**")
+    st.caption("💡 **Aba Tutorial:** Primeiro, dê uma olhada rápida na aba de tutorial para entender como funcionam os filtros de variáveis do IBGE.")
+    st.caption("📍 **Aba Localidades:** Depois, pesquise e ative a cidade ou o estado que deseja analisar.")
+    st.caption("📖 **Aba Catálogo:** Por fim, escolha a tabela desejada no catálogo e comece a extrair os dados!")
                
     st.markdown("---")
     
@@ -316,6 +201,7 @@ elif aba_ativa == "📋 Guia Principal":
         st.markdown("---")
         st.subheader("⚙️ Filtro")
         
+        # Recebe os dados dinâmicos salvos nas abas de Catálogo e Localidades
         cod_territorio = st.text_input("Nível Territorial (1=Brasil, 3=Estado, 6=Município):", value=st.session_state.nivel_territorial)
         cod_municipio = st.text_input("Cód. Localidade / Município (all ou id de 7 dígitos):", value=st.session_state.localidade_selecionada)
         
