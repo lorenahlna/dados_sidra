@@ -150,11 +150,10 @@ elif aba_ativa == "📋 Guia Principal":
     st.title("SidraX")
     
     # CORREÇÃO AQUI: Mudado para aspas triplas para aceitar quebras de linha sem erro
-    st.caption("""🎯 Como começar a sua consulta:
-               
-💡 Aba Tutorial: Primeiro, dê uma olhada rápida na aba de tutorial para entender como funcionam os filtros de variáveis do IBGE.
-📍 Aba Localidades: Depois, pesquise e ative a cidade ou o estado que deseja analisar.
-📖 Aba Catálogo: Por fim, escolha a tabela desejada no catálogo e comece a extrair os dados!""")
+    st.caption("🎯 **Como começar a sua consulta:**")
+    st.caption("💡 **Aba Tutorial:** Primeiro, dê uma olhada rápida na aba de tutorial para entender como funcionam os filtros de variáveis do IBGE.")
+    st.caption("📍 **Aba Localidades:** Depois, pesquise e ative a cidade ou o estado que deseja analisar.")
+    st.caption("📖 **Aba Catálogo:** Por fim, escolha a tabela desejada no catálogo e comece a extrair os dados!")
                
     st.markdown("---")
     
