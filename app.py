@@ -9,15 +9,95 @@ st.set_page_config(
     layout="wide"
 )
 
-# Customização visual 
+# Customização visual avançada (Nova Identidade Visual)
 st.markdown("""
     <style>
-    .main { background-color: #f4f6f9; }
-    h1, h2, h3 { color: #003399 !important; font-family: 'Segoe UI', sans-serif; }
-    .stButton>button { border-radius: 8px; font-weight: bold; background-color: #003399; color: white; }
-    .stButton>button:hover { background-color: #002266; color: white; }
-    div[data-testid="stExpander"] { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .card-tutorial { background-color: #e6f0ff; padding: 15px; border-left: 5px solid #003399; border-radius: 4px; }
+    /* Estilização Geral do App */
+    .stApp {
+        background-color: #F8FAFC;
+    }
+    
+    /* Títulos Principais e Fontes */
+    h1, h2, h3 { 
+        color: #0F172A !important; 
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        font-weight: 700 !important;
+    }
+    
+    h1 { letter-spacing: -0.05em; margin-bottom: 0.5rem !important; }
+    
+    /* Menu Lateral */
+    [data-testid="stSidebar"] {
+        background-color: #FFFFFF !important;
+        border-right: 1px solid #E2E8F0;
+    }
+    [data-testid="stSidebar"] h3 {
+        font-size: 0.9rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748B !important;
+    }
+
+    /* Botões Modernos (Primários e Secundários) */
+    .stButton>button { 
+        border-radius: 10px !important; 
+        font-weight: 600 !important; 
+        transition: all 0.2s ease-in-out !important;
+        border: none !important;
+        padding: 0.6rem 1.2rem !important;
+    }
+    
+    /* Botão Primário (Baixar) */
+    .stButton>button[kind="primary"] {
+        background-color: #2563EB !important; 
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
+    }
+    .stButton>button[kind="primary"]:hover { 
+        background-color: #1D4ED8 !important; 
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3) !important;
+    }
+    
+    /* Botão Secundário (Consultar) */
+    .stButton>button[kind="secondary"] {
+        background-color: #E2E8F0 !important; 
+        color: #0F172A !important;
+    }
+    .stButton>button[kind="secondary"]:hover { 
+        background-color: #CBD5E1 !important; 
+        color: #0F172A !important;
+    }
+    
+    /* Containers, Expanders e Cards */
+    div[data-testid="stExpander"] { 
+        background-color: #FFFFFF !important; 
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important; 
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.04) !important;
+    }
+    
+    .card-tutorial { 
+        background-color: #FFFFFF; 
+        padding: 20px; 
+        border-left: 4px solid #2563EB; 
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        border-top: 1px solid #F1F5F9;
+        border-right: 1px solid #F1F5F9;
+        border-bottom: 1px solid #F1F5F9;
+    }
+    .card-tutorial h3 { color: #2563EB !important; margin-top: 0; }
+    
+    /* Ajustes finos nos inputs */
+    div[data-testid="stTextInput"] input {
+        border-radius: 8px !important;
+        border: 1px solid #CBD5E1 !important;
+    }
+    div[data-testid="stTextInput"] input:focus {
+        border-color: #2563EB !important;
+        box-shadow: 0 0 0 1px #2563EB !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -149,11 +229,15 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
 elif aba_ativa == "📋 Guia Principal":
     st.title("SidraX")
     
-    # CORREÇÃO AQUI: Mudado para aspas triplas para aceitar quebras de linha sem erro
-    st.caption("🎯 **Como começar a sua consulta:**")
-    st.caption("💡 **Aba Tutorial:** Primeiro, dê uma olhada rápida na aba de tutorial para entender como funcionam os filtros de variáveis do IBGE.")
-    st.caption("📍 **Aba Localidades:** Depois, pesquise e ative a cidade ou o estado que deseja analisar.")
-    st.caption("📖 **Aba Catálogo:** Por fim, escolha a tabela desejada no catálogo e comece a extrair os dados!")
+    # Grid de passos iniciais modernos
+    st.markdown("### 🚀 Fluxo de Trabalho Recomendado")
+    p1, p2, p3 = st.columns(3)
+    with p1:
+        st.info("💡 **1. Aprenda os Filtros**\nAcesse a aba **Tutorial** para entender a lógica de variáveis do IBGE.")
+    with p2:
+        st.info("📍 **2. Defina o Local**\nConfigure a sua região geográfica alvo na aba **Localidades**.")
+    with p3:
+        st.info("📖 **3. Escolha a Tabela**\nAtive o conjunto de dados desejado na aba **Catálogo**.")
                
     st.markdown("---")
     
