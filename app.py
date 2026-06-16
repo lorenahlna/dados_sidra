@@ -4,7 +4,7 @@ import pandas as pd
 
 # CONFIGURAÇÃO DE DESIGN DA PÁGINA
 st.set_page_config(
-    page_title="SIDRA v5.6",
+    page_title="SidraX",
     page_icon="📊",
     layout="wide"
 )
@@ -147,8 +147,12 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
 # GUIA PRINCIPAL
 # =========================================================
 elif aba_ativa == "📋 Guia Principal":
-    st.title("SIDRA v5.6")
-    st.caption("Insira os dados à esquerda")
+    st.title("SidraX")
+    st.caption("🎯 Como começar a sua consulta:
+
+💡 Aba Tutorial: Primeiro, dê uma olhada rápida na aba de tutorial para entender como funcionam os filtros de variáveis do IBGE.
+📍 Aba Localidades: Depois, pesquise e ative a cidade ou o estado que deseja analisar.
+📖 Aba Catálogo: Por fim, escolha a tabela desejada no catálogo e comece a extrair os dados!")
     st.markdown("---")
     
     col_inputs, col_outputs = st.columns([1, 2])
