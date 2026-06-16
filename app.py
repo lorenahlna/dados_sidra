@@ -9,94 +9,129 @@ st.set_page_config(
     layout="wide"
 )
 
-# Customização visual avançada (Nova Identidade Visual)
+# Customização visual avançada (Identidade Visual Matrix Cyberpunk)
 st.markdown("""
     <style>
-    /* Estilização Geral do App */
+    /* Fundo Preto Profundo e Fonte Estilo Terminal */
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap');
+    
     .stApp {
-        background-color: #F8FAFC;
+        background-color: #050505;
+        font-family: 'Fira Code', monospace !important;
+        color: #00FF66 !important;
     }
     
-    /* Títulos Principais e Fontes */
+    /* Títulos em Neon */
     h1, h2, h3 { 
-        color: #0F172A !important; 
-        font-family: 'Inter', 'Segoe UI', sans-serif;
+        color: #00F0FF !important; 
+        font-family: 'Fira Code', monospace !important;
         font-weight: 700 !important;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
     }
     
-    h1 { letter-spacing: -0.05em; margin-bottom: 0.5rem !important; }
+    h1 { letter-spacing: -0.02em; margin-bottom: 1rem !important; }
     
-    /* Menu Lateral */
+    /* Menu Lateral Dark Cyber */
     [data-testid="stSidebar"] {
-        background-color: #FFFFFF !important;
-        border-right: 1px solid #E2E8F0;
+        background-color: #0A0A0A !important;
+        border-right: 1px solid #00FF66;
     }
     [data-testid="stSidebar"] h3 {
         font-size: 0.9rem !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #64748B !important;
+        letter-spacing: 0.1em;
+        color: #00F0FF !important;
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+    }
+    
+    /* Radio Buttons no Menu Lateral */
+    [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
+        color: #00FF66 !important;
     }
 
-    /* Botões Modernos (Primários e Secundários) */
+    /* Botões Estilo Hackerspace */
     .stButton>button { 
-        border-radius: 10px !important; 
+        border-radius: 4px !important; 
+        font-family: 'Fira Code', monospace !important;
         font-weight: 600 !important; 
         transition: all 0.2s ease-in-out !important;
-        border: none !important;
         padding: 0.6rem 1.2rem !important;
+        background-color: transparent !important;
     }
     
-    /* Botão Primário (Baixar) */
+    /* Botão Primário (Baixar) - Rosa Neon Cyberpunk */
     .stButton>button[kind="primary"] {
-        background-color: #2563EB !important; 
-        color: white !important;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2) !important;
+        color: #FF0055 !important;
+        border: 1px solid #FF0055 !important;
+        box-shadow: 0 0 8px rgba(255, 0, 85, 0.3) !important;
     }
     .stButton>button[kind="primary"]:hover { 
-        background-color: #1D4ED8 !important; 
-        transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3) !important;
+        background-color: #FF0055 !important; 
+        color: #000000 !important;
+        box-shadow: 0 0 15px rgba(255, 0, 85, 0.8) !important;
     }
     
-    /* Botão Secundário (Consultar) */
+    /* Botão Secundário (Consultar) - Verde Matrix */
     .stButton>button[kind="secondary"] {
-        background-color: #E2E8F0 !important; 
-        color: #0F172A !important;
+        color: #00FF66 !important;
+        border: 1px solid #00FF66 !important;
+        box-shadow: 0 0 8px rgba(0, 255, 102, 0.3) !important;
     }
     .stButton>button[kind="secondary"]:hover { 
-        background-color: #CBD5E1 !important; 
-        color: #0F172A !important;
+        background-color: #00FF66 !important; 
+        color: #000000 !important;
+        box-shadow: 0 0 15px rgba(0, 255, 102, 0.8) !important;
     }
     
-    /* Containers, Expanders e Cards */
+    /* Grid de Dados e Tabelas Estilo Terminal */
+    div[data-testid="stDataFrame"] {
+        background-color: #0A0A0A !important;
+        border: 1px solid #00FF66 !important;
+    }
+    
+    /* Containers e Expanders Netrunner */
     div[data-testid="stExpander"] { 
-        background-color: #FFFFFF !important; 
-        border: 1px solid #E2E8F0 !important;
-        border-radius: 12px !important; 
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.04) !important;
+        background-color: #0A0A0A !important; 
+        border: 1px solid #00F0FF !important;
+        border-radius: 4px !important; 
     }
     
     .card-tutorial { 
-        background-color: #FFFFFF; 
+        background-color: #0A0A0A; 
         padding: 20px; 
-        border-left: 4px solid #2563EB; 
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
-        border-top: 1px solid #F1F5F9;
-        border-right: 1px solid #F1F5F9;
-        border-bottom: 1px solid #F1F5F9;
+        border: 1px solid #00F0FF;
+        border-left: 5px solid #00F0FF; 
+        border-radius: 4px;
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.2) !important;
     }
-    .card-tutorial h3 { color: #2563EB !important; margin-top: 0; }
+    .card-tutorial h3 { color: #00F0FF !important; }
     
-    /* Ajustes finos nos inputs */
+    /* Inputs de Texto (Linhas de Comando) */
     div[data-testid="stTextInput"] input {
-        border-radius: 8px !important;
-        border: 1px solid #CBD5E1 !important;
+        background-color: #0A0A0A !important;
+        color: #00FF66 !important;
+        border-radius: 4px !important;
+        border: 1px solid #333333 !important;
+        font-family: 'Fira Code', monospace !important;
     }
     div[data-testid="stTextInput"] input:focus {
-        border-color: #2563EB !important;
-        box-shadow: 0 0 0 1px #2563EB !important;
+        border-color: #00FF66 !important;
+        box-shadow: 0 0 10px rgba(0, 255, 102, 0.5) !important;
+    }
+    
+    /* Tabs Internas */
+    button[data-baseweb="tab"] {
+        color: #64748B !important;
+    }
+    button[aria-selected="true"] {
+        color: #00FF66 !important;
+        border-bottom-color: #00FF66 !important;
+    }
+    
+    /* Caixas de Alerta e Avisos Customizadas */
+    div[data-testid="stAlert"] {
+        background-color: #0A0A0A !important;
+        color: #00FF66 !important;
+        border: 1px solid #00FF66 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -107,11 +142,9 @@ st.markdown("""
 @st.cache_data
 def carregar_dados_catalogo():
     try:
-        # Lê o arquivo JSON estável que está no seu repositório
         df = pd.read_json('tabelas.json', dtype={'ID': str})
         return df
     except Exception as e:
-        # Caso o arquivo dê erro ou não seja encontrado, cria um aviso para não travar o app
         return pd.DataFrame([{
             "Grupo": "Erro", 
             "Assunto": "Erro", 
@@ -123,7 +156,7 @@ def carregar_dados_catalogo():
 
 df_catalogo = carregar_dados_catalogo()
 
-# Estado da sessão para não perder variáveis no clique e transferir entre as telas
+# Estado da sessão
 if "id_selecionado" not in st.session_state: st.session_state.id_selecionado = "9606"
 if "localidade_selecionada" not in st.session_state: st.session_state.localidade_selecionada = "all"
 if "nivel_territorial" not in st.session_state: st.session_state.nivel_territorial = "6"
@@ -147,13 +180,12 @@ st.sidebar.markdown("### 🗺️ Parâmetros Ativos:")
 st.sidebar.info(f"**Tabela ID:** {st.session_state.id_selecionado}\n\n**Cód. Local:** {st.session_state.localidade_selecionada}")
 
 # =========================================================
-# ABA: CATALOGO DE CONSULTAS (LENDO DO REPOSITÓRIO JSON)
+# ABA: CATALOGO DE CONSULTAS
 # =========================================================
 if aba_ativa == "📖 Catálogo (Consultas)":
     st.title("📖 Catálogo de Tabelas")
     st.markdown("Selecione uma tabela no catálogo abaixo para configurar os filtros automaticamente.")
     
-    # Exibe a tabela lida do JSON
     st.dataframe(df_catalogo, use_container_width=True, hide_index=True)
     
     st.subheader("🎯 Ativação Rápida:")
@@ -170,7 +202,7 @@ if aba_ativa == "📖 Catálogo (Consultas)":
                         st.success(f"Tabela {id_limpo} ativada! Vá para a '📋 Guia Principal' para rodar.")
 
 # =========================================================
-# ABA: CONSULTA DE LOCALIDADES (AUTOMÁTICA)
+# ABA: CONSULTA DE LOCALIDADES
 # =========================================================
 elif aba_ativa == "📍 Localidades (Cód. IBGE)":
     st.title("📍 Localizador de Municípios e Estados")
@@ -229,7 +261,6 @@ elif aba_ativa == "📍 Localidades (Cód. IBGE)":
 elif aba_ativa == "📋 Guia Principal":
     st.title("SidraX")
     
-    # Grid de passos iniciais modernos
     st.markdown("### 🚀 Fluxo de Trabalho Recomendado")
     p1, p2, p3 = st.columns(3)
     with p1:
@@ -285,7 +316,6 @@ elif aba_ativa == "📋 Guia Principal":
         st.markdown("---")
         st.subheader("⚙️ Filtro")
         
-        # Recebe os dados dinâmicos salvos nas abas de Catálogo e Localidades
         cod_territorio = st.text_input("Nível Territorial (1=Brasil, 3=Estado, 6=Município):", value=st.session_state.nivel_territorial)
         cod_municipio = st.text_input("Cód. Localidade / Município (all ou id de 7 dígitos):", value=st.session_state.localidade_selecionada)
         
